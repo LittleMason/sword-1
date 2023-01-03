@@ -68,8 +68,10 @@ const temps = (hasDynamicTable:boolean)=>{
 const drawerTemp = (apiPath,modelName,addName,hasProjectDefaultParam,hasDynamicTable,actions:ActionsType) => {
   const {add,edit} = actions;
   return `
-  ${temps(hasDynamicTable)}
-  <script lang="ts">
+<template>
+    ${temps(hasDynamicTable)}
+</template>
+<script lang="ts">
     import { defineComponent, ref, computed, unref } from 'vue';
     import { BasicForm, useForm } from '/@/components/Form/index';
     import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
@@ -140,7 +142,7 @@ const drawerTemp = (apiPath,modelName,addName,hasProjectDefaultParam,hasDynamicT
         };
       },
     });
-  </script>
+</script>
   `;
 };
 

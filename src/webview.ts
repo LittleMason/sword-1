@@ -88,7 +88,7 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 			async message => {
 				console.log('post:',message)
 				const res  = await FileUtil.createFolderByTemp(message);
-				vscode.window.showInformationMessage('创建成功！')
+				vscode.window.showInformationMessage(res.message ?? res)
 				return;
 			},
 			null,
@@ -143,59 +143,46 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
+		const chunkJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'chunk.js');
+		const appJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'app.js');
 
 		// And the uri we use to load this script in the webview
-		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+		const chunkJs = webview.asWebviewUri(chunkJsPath);
+		const appJs = webview.asWebviewUri(appJsPath);
 
 		// Local path to css styles
-		const styleResetPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css');
-		const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
+		const chunkCssPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'chunk.css');
+		const appCssPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'app.css');
 
 		// Uri to load styles into webview
-		const stylesResetUri = webview.asWebviewUri(styleResetPath);
-		const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
-		console.log('stylesMainUri:',stylesMainUri)
-		console.log('scriptUri:',scriptUri)
+		const chunkCss = webview.asWebviewUri(chunkCssPath);
+		const appCss = webview.asWebviewUri(appCssPath);
+		console.log('chunkCss:',chunkCss)
+		console.log('scriptUri:',chunkJs)
 		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
-		return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
-
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				<link href="${stylesResetUri}" rel="stylesheet">
-				<link href="${stylesMainUri}" rel="stylesheet">
-
-				<title>V3 template generator</title>
-			</head>
-			<body>
-				<div>
-					<div class="title">V3 中台系统模板生成配置</div>
-					<div class="item">
-						<span>生成路径：</span>
-						<input type="text" id="url">
-					</div>
-					<div class="item">
-						<span>模块名称：</span>
-						<input type="text" id="name">
-					</div>
-					<div class="submit-box">
-						<button id="btn" onclick="postFormMessage()">确定</button>
-					</div>
-				</div>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-			</body>
-			</html>`;
+		return `<!doctype html>
+		<html lang="">
+		
+		<head>
+			<meta charset="utf-8">
+			<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="icon" href="/favicon.ico">
+			<title>sword-form</title>
+			<script nonce="${nonce}" defer="defer" src="${chunkJs}"></script>
+			<script nonce="${nonce}" defer="defer" src="${appJs}"></script>
+			<link href="${chunkCss}" rel="stylesheet">
+			<link href="${appCss}" rel="stylesheet">
+		</head>
+		
+		<body><noscript><strong>We're sorry but sword-form doesn't work properly without JavaScript enabled. Please enable it to
+					continue.</strong></noscript>
+			<div id="app"></div>
+		</body>
+		
+		</html>`;
 	}
 	public async getIp() {
     let urlGithub = `https://raw.githubusercontent.com/isevenluo/github-hosts/master/hosts`;

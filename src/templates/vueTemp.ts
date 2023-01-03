@@ -52,7 +52,8 @@ const handleDelete = ()=>{
  */
 export const temps = (addName,actions:ActionsType)=>{
     const {add,del,edit} = actions;
-    return `<template>
+    return `
+<template>
     <div>
       <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
         <template #toolbar>
@@ -62,8 +63,8 @@ export const temps = (addName,actions:ActionsType)=>{
           <template v-if="column.key === 'action'">
             <TableAction
               :actions="[
-                ${edit?editBtn():''},
-                ${del?delBtn():''},
+                ${edit?editBtn():''}
+                ${del?delBtn():''}
               ]"
             />
           </template>
@@ -71,7 +72,7 @@ export const temps = (addName,actions:ActionsType)=>{
       </BasicTable>
       <Drawer @register="registerDrawer" ${add?`@success="handleSuccess"`:''}/>
     </div>
-  </template>`
+</template>`
 }
 /**
  * @param {string} modelName - sfc文件名称
@@ -81,14 +82,15 @@ export const temps = (addName,actions:ActionsType)=>{
  */
 export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
     const {add,del,edit,upload,_export} = actions;
-    return `<script lang="ts">
+    return `
+    <script lang="ts">
     //other第三方
     import { defineComponent, ref } from 'vue';
     //self全局业务组件
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
     import {useDrawer} from "/@/components/Drawer";
     //self页面局部配置及组件
-    import { Origin,${upload?'Upload':''},${_export?'Export,Download':''} } from '/@/api/${apiPath}';
+    import { Origin${upload?',Upload,':''}${_export?'Export,Download':''} } from '/@/api/${apiPath}';
     import { columns, searchFormSchema } from './data';
     import Drawer from './Drawer.vue';
   
@@ -130,10 +132,10 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
         return {
           registerTable,
           registerDrawer,
-          ${add?'handleCreate,':''}
-          ${add?'handleSuccess,':''}
-          ${del?'handleDelete,':''}
-          ${edit?'handleEdit,':''}
+          ${add?'handleCreate,':undefined}
+          ${add?'handleSuccess,':undefined}
+          ${del?'handleDelete,':undefined}
+          ${edit?'handleEdit,':undefined}
         };
       },
     });

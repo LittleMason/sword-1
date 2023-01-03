@@ -11,8 +11,7 @@ const editApi = (url) => {
   return `Edit = '${url}', //编辑`;
 };
 const uploadApi = (upUrl, downUrl) => {
-  return `
-  Upload = '${upUrl}', //导入
+  return `Upload = '${upUrl}', //导入
   Download = '${downUrl}', //模板下载
   `;
 };
@@ -25,16 +24,16 @@ const apiTemp = (apis,title) => {
     import { lorealHttp } from '/@/utils/http/axios';
 
     enum Api {
-      ${Origin ? fetchApi(Origin) : ""}
-      ${Add ? addApi(Add) : ""}
-      ${Del ? delApi(Del) : ""}
-      ${Edit ? editApi(Edit) : ""}
-      ${Upload ? uploadApi(Upload, Download) : ""}
-      ${Export ? exportApi(Export) : ""}
+      ${Origin ? fetchApi(Origin):''}
+      ${Add ? addApi(Add):''}
+      ${Del ? delApi(Del):''}
+      ${Edit ? editApi(Edit):''}
+      ${Upload ? uploadApi(Upload, Download):''}
+      ${Export ? exportApi(Export):''}
     }
     
-    export const origin = (params?: PageInfoParams) =>
-      lorealHttp.post<PageInfoModel>({ url: Api.Origin, params });
+    export const origin = (params?: any) =>
+      lorealHttp.post<any>({ url: Api.Origin, params });
     ${
       Add
         ? `export const add = (params: any) =>

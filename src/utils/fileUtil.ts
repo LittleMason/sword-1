@@ -12,6 +12,36 @@ import {
   storeTemp,
 } from "../templates";
 
+// 递归创建目录 异步方法
+function mkdirs(dirname, callback) {
+  fs.exists(dirname, function (exists) {
+    if (exists) {
+      callback();
+    } else {
+      // console.log(path.dirname(dirname));
+      mkdirs(path.dirname(dirname), function () {
+        fs.mkdir(dirname, callback);
+        console.log(
+          "在" + path.dirname(dirname) + "目录创建好" + dirname + "目录"
+        );
+      });
+    }
+  });
+}
+// 递归创建目录 同步方法
+function mkdirsSync(dirname) {
+  if (fs.existsSync(dirname)) {
+    return true;
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      console.log(
+        "在" + path.dirname(dirname) + "目录创建好" + dirname + "目录"
+      );
+      return true;
+    }
+  }
+}
 export class FileUtil {
   private static readonly WIN32_HOST_PATH: string =
     "C:\\Windows\\System32\\drivers\\etc\\hosts";
@@ -44,44 +74,71 @@ export class FileUtil {
       modelPath,
       actions,
       title,
-      addName,
-      apiName,
+      addName="",
+      apiFileName,
       hasStore,
       apis,
       hasDictionary,
       hasDynamicTable,
       hasProjectDefaultParam,
     } = params;
-    const folderPath = `${projectUrl}\\src\\views\\${modelPath}`; //生成模块完整路径
-    const apiPath = `${projectUrl}\\src\\api\\${modelPath}`; //生成api完整路径
-    const apiFileName = apiName ? `${apiName}.ts` : "index.ts"; //api文件名称
-
-    const res = await mkdir(folderPath);
-    const dataResult = await fs.writeFileSync(
-      `${folderPath}\\data.ts`,
-      dataTemp(hasDictionary)
-    );
-    if (hasStore) {
-      await fs.writeFileSync(`${folderPath}\\store.ts`, storeTemp(modelName));
+    const folderPath = `${projectUrl}\\src\\views\\${modelPath.replaceAll(
+      "/",
+      "\\"
+    )}`; //生成模块完整路径
+    const apiPath = `${projectUrl}\\src\\api\\${modelPath.replaceAll(
+      "/",
+      "\\"
+    )}`; //生成api完整路径
+    const _apiFileName = apiFileName ? `${apiFileName}.ts` : `${modelName}.ts`; //api文件名称
+    const apiModelPath = `${modelPath}/${_apiFileName}`;
+    let actionType = {
+      add: false,
+      del: false,
+      edit: false,
+      upload: false,
+      _export: false,
+    };
+    for (let x in actions) {
+      actionType[actions[x]] = true;
     }
-    await fs.writeFileSync(`${apiPath}\\${apiFileName}`, apiTemp(apis, title));
-    await fs.writeFileSync(
-      `${folderPath}\\index.vue`,
-      vueTemp(addName, modelName, title, apiPath, actions)
-    );
-    await fs.writeFileSync(
-      `${folderPath}\\Drawer.vue`,
-      drawerTemp(
-        apiPath,
-        modelName,
-        addName,
-        hasProjectDefaultParam,
-        hasDynamicTable,
-        actions
-      )
-    );
-    console.log("dataResult:", dataResult);
-    return res;
+    console.log("actionType:", actionType);
+    try {
+      await mkdirsSync(folderPath);
+      await mkdirsSync(apiPath);
+      const dataResult = await fs.writeFileSync(
+        `${folderPath}\\data.ts`,
+        dataTemp(hasDictionary)
+      );
+      if (hasStore) {
+        await fs.writeFileSync(`${folderPath}\\store.ts`, storeTemp(modelName));
+      }
+      const apiResult = await fs.writeFileSync(
+        `${apiPath}\\${_apiFileName}`,
+        apiTemp(apis, title)
+      );
+      await fs.writeFileSync(
+        `${folderPath}\\index.vue`,
+        vueTemp(addName, modelName, title, apiModelPath, actionType)
+      );
+      await fs.writeFileSync(
+        `${folderPath}\\Drawer.vue`,
+        drawerTemp(
+          apiModelPath,
+          modelName,
+          addName,
+          hasProjectDefaultParam,
+          hasDynamicTable,
+          actionType
+        )
+      );
+      console.log("dataResult:", dataResult);
+      console.log("apiResult:", apiResult);
+      return "创建成功！";
+    } catch (error) {
+      console.log("error:", error);
+      return error;
+    }
   }
 
   public static createHostFile(appRoot: string, name: string) {
