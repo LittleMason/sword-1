@@ -91,8 +91,8 @@ export class FileUtil {
       "\\"
     )}`; //生成api完整路径
     const _apiFileName = apiFileName ? `${apiFileName}.ts` : `${modelName}.ts`; //api文件名称
-    const apiModelPath = `${modelPath}/${_apiFileName}`;
-    let actionType = {
+    const apiModelPath = `${modelPath}/${apiFileName}`;
+    let actionType:ActionsType = {
       add: false,
       del: false,
       edit: false,

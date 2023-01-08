@@ -79,7 +79,7 @@ const drawerTemp = (apiPath,modelName,addName,hasProjectDefaultParam,hasDynamicT
     import { formSchema } from './data';
     import { useUserStore } from '/@/store/modules/user';
   
-    import { ${add?'add':''}, ${edit?'edit':''}, } from '/@/api/${apiPath}';
+    import { ${add?'Add,':''} ${edit?'Edit,':''} } from '/@/api/${apiPath}';
   
     export default defineComponent({
       name: '${modelName}Drawer',
@@ -94,7 +94,7 @@ const drawerTemp = (apiPath,modelName,addName,hasProjectDefaultParam,hasDynamicT
         ${hasDynamicTable?registerTable():''}
 
         //form
-        const [registerForm, { validate, getFieldsValue, setFieldsValue, resetFields, updateSchema }] =
+        const [registerForm, { validate, getFieldsValue, setFieldsValue, resetFields }] =
           useForm({
             labelWidth: 120,
             schemas: formSchema,
@@ -121,10 +121,10 @@ const drawerTemp = (apiPath,modelName,addName,hasProjectDefaultParam,hasDynamicT
               const values = await validate();
               if (!unref(isUpdate)) {
                 //add
-                await add({ ...values,${hasProjectDefaultParam?`...appendUserInfo`:''} });
+                await Add({ ...values,${hasProjectDefaultParam?`...appendUserInfo`:''} });
               } else {
                 //edit
-                await edit({ ...values, id: unref(record)?.id, ${hasProjectDefaultParam?`...appendUserInfo`:''} });
+                await Edit({ ...values, id: unref(record)?.id, ${hasProjectDefaultParam?`...appendUserInfo`:''} });
               }
               closeDrawer();
               emit('success');

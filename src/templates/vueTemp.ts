@@ -1,7 +1,7 @@
 import {ActionsType} from '../types/templates'
 
 const addBtn = (name)=>{
-    return `<a-button type="primary" @click="handleCreate"> 新增${name} </a-button>`
+    return `<a-button type="primary" @click="handleCreate"> ${name??'新增'} </a-button>`
 }
 const editBtn = ()=>{
     return `{
@@ -90,7 +90,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
     import {useDrawer} from "/@/components/Drawer";
     //self页面局部配置及组件
-    import { Origin${upload?',Upload,':''}${_export?'Export,Download':''} } from '/@/api/${apiPath}';
+    import { Origin,${upload?'Upload,':''}${_export?'Export,Download':''} } from '/@/api/${apiPath}';
     import { columns, searchFormSchema } from './data';
     import Drawer from './Drawer.vue';
   
@@ -106,7 +106,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
           `importApi:Upload,
           downloadApi:Download,`:''
           }
-          ${_export?`exportApi:Export`:''},
+          ${_export?`exportApi:Export,`:''}
           columns,
           formConfig: {
             labelWidth: 120,
@@ -132,10 +132,10 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
         return {
           registerTable,
           registerDrawer,
-          ${add?'handleCreate,':undefined}
-          ${add?'handleSuccess,':undefined}
-          ${del?'handleDelete,':undefined}
-          ${edit?'handleEdit,':undefined}
+          ${add?'handleCreate,':''}
+          ${add?'handleSuccess,':''}
+          ${del?'handleDelete,':''}
+          ${edit?'handleEdit,':''}
         };
       },
     });

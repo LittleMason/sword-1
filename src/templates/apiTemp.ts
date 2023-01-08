@@ -32,23 +32,23 @@ const apiTemp = (apis,title) => {
       ${Export ? exportApi(Export):''}
     }
     
-    export const origin = (params?: any) =>
+    export const Origin = (params?: any) =>
       lorealHttp.post<any>({ url: Api.Origin, params });
     ${
       Add
-        ? `export const add = (params: any) =>
+        ? `export const Add = (params: any) =>
       lorealHttp.post<any>({ url: Api.Add, params },{autoMessage:true,autoMessageSuccess:'新增成功！'});`
         : ""
     }
     ${
       Del
-        ? `export const del = (params: any) =>
+        ? `export const Del = (params: any) =>
       lorealHttp.post<any>({ url: \`\${Api.Del}/\${params.id}\` },{autoMessage:true,autoMessageSuccess:'删除成功！'});`
         : ""
     }
     ${
       Edit
-        ? `export const edit = (params: any) =>
+        ? `export const Edit = (params: any) =>
         lorealHttp.post<any>({ url: Api.Edit, params },{autoMessage:true,autoMessageSuccess:'编辑成功！'});`
         : ""
     }
