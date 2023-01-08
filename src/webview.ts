@@ -142,6 +142,7 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
+		// console.log('workspaceFolder:',workspaceFolder);
 		// Local path to main script run in the webview
 		const chunkJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'chunk.js');
 		const appJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'app.js');
