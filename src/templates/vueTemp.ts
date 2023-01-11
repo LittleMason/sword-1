@@ -12,10 +12,15 @@ const editBtn = ()=>{
 }
 const delBtn = ()=>{
     return `{
-        icon: 'ant-design:delete-outlined',
-        onClick: handleDelete.bind(null, record),
-        tooltip:'删除'
-      },`
+      icon: 'ant-design:delete-outlined',
+      color: 'error',
+      tooltip:'删除',
+      popConfirm: {
+        title: '是否确认删除',
+        placement: 'left',
+        confirm: handleDelete.bind(null, record),
+      },
+    },`
 }
 
 const handleAdd = ()=>{
@@ -42,8 +47,9 @@ const handleEdit = ()=>{
 
 const handleDelete = ()=>{
     return `//删除
-    function handleDelete(){
-
+    async function handleDelete(record: Recordable) {
+      await Del(record.id);
+      reload();
     }`
 }
 /**
@@ -90,7 +96,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
     import {useDrawer} from "/@/components/Drawer";
     //self页面局部配置及组件
-    import { Origin,${upload?'Upload,':''}${_export?'Export,Download':''} } from '/@/api/${apiPath}';
+    import { Origin,${del?'Del,':''}${upload?'Upload,Download,':''}${_export?'Export':''} } from '/@/api/${apiPath}';
     import { columns, searchFormSchema } from './data';
     import Drawer from './Drawer.vue';
   
@@ -110,6 +116,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
           columns,
           formConfig: {
             labelWidth: 120,
+            baseColProps:{span:8},
             schemas: searchFormSchema,
           },
           useSearchForm: true,
@@ -120,7 +127,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
           actionColumn: {
             width: 80,
             title: '操作',
-            dataIndex: '_action',
+            dataIndex: 'action',
             fixed: 'left',
           },
         }); 

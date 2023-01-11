@@ -42,8 +42,8 @@ const apiTemp = (apis,title) => {
     }
     ${
       Del
-        ? `export const Del = (params: any) =>
-      lorealHttp.post<any>({ url: \`\${Api.Del}/\${params.id}\` },{autoMessage:true,autoMessageSuccess:'删除成功！'});`
+        ? `export const Del = (id: any) =>
+      lorealHttp.post<any>({ url: \`\${Api.Del}/\${id}\` },{autoMessage:true,autoMessageSuccess:'删除成功！'});`
         : ""
     }
     ${
