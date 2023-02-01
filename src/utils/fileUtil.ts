@@ -81,6 +81,7 @@ export class FileUtil {
       hasDictionary,
       hasDynamicTable,
       hasProjectDefaultParam,
+      dynamicFields,
     } = params;
     const folderPath = `${projectUrl}\\src\\views\\${modelPath.replaceAll(
       "/",
@@ -108,7 +109,7 @@ export class FileUtil {
       await mkdirsSync(apiPath);
       const dataResult = await fs.writeFileSync(
         `${folderPath}\\data.ts`,
-        dataTemp(hasDictionary)
+        dataTemp(hasDictionary,dynamicFields)
       );
       if (hasStore) {
         await fs.writeFileSync(`${folderPath}\\store.ts`, storeTemp(modelName));
