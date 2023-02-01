@@ -54,7 +54,6 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		);
 
 		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
-		// CatCodingPanel.currentPanel.getIp();
 	}
 
 	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -144,16 +143,16 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// console.log('workspaceFolder:',workspaceFolder);
 		// Local path to main script run in the webview
-		const chunkJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'chunk.js');
-		const appJsPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'app.js');
+		const chunkJsPath = vscode.Uri.joinPath(this._extensionUri, 'media/js', 'chunk-vendors.js');
+		const appJsPath = vscode.Uri.joinPath(this._extensionUri, 'media/js', 'app.js');
 
 		// And the uri we use to load this script in the webview
 		const chunkJs = webview.asWebviewUri(chunkJsPath);
 		const appJs = webview.asWebviewUri(appJsPath);
 
 		// Local path to css styles
-		const chunkCssPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'chunk.css');
-		const appCssPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'app.css');
+		const chunkCssPath = vscode.Uri.joinPath(this._extensionUri, 'media/css', 'chunk-vendors.css');
+		const appCssPath = vscode.Uri.joinPath(this._extensionUri, 'media/css', 'app.css');
 
 		// Uri to load styles into webview
 		const chunkCss = webview.asWebviewUri(chunkCssPath);
@@ -185,18 +184,6 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		
 		</html>`;
 	}
-	public async getIp() {
-    let urlGithub = `https://raw.githubusercontent.com/isevenluo/github-hosts/master/hosts`;
-		axios.get(urlGithub).then((res:any) => {
-			let list = '\n'.concat(res.data).split('#');
-			list.splice(-4, 2);
-			data = list.join('#');
-			vscode.window.showInformationMessage('结果已出');
-			this._update();
-			return;
-		});
-	}
-
 	
 }
 

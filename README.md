@@ -15,5 +15,5 @@ vsce publish -p '（自己的token,token都有时限，过期了再去官网申�
 
 [问题反馈](https://github.com/haimalairen/sword_1/issues)
 <!--
-mgzv6iyvkon6i6zebm74zd7kbe2mzhjzz7oya2x6fzlucoxaor5a
+samhtaubb673xpidzy23izpmzts4snd2ezxhqbe7qjshorvn2dwq
 -->

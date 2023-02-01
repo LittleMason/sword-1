@@ -13,12 +13,12 @@ const useDictionary = () => {
 };
 
 const createTableField = (dynamicFields: DynamicFieldType[]) => {
+  //${item.component ? `component:'${item.component}'` : ""} 后续有table组件了再加该字段
   return dynamicFields.map((item) => {
     return `{
             title: '${item.label}',
             dataIndex: '${item.field}',
             width: '${item.width ?? 100}',
-            ${item.component ? `component:${item.component}` : ""}
         }`;
   });
 };
@@ -28,7 +28,7 @@ const createSearchFormField = (dynamicFields: DynamicFieldType[]) => {
     return item.isSearchForm === 1;
   });
   return datas.map((item) => {
-    const colSpan = item.component.indexOf("Picker") ? "24" : "8";
+    const colSpan = item.component.indexOf("Picker")!=-1 ? "24" : "8";
     return `{
          field: '${item.field}',
          label: '${item.label}',

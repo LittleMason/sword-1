@@ -1,7 +1,7 @@
 import {ActionsType} from '../types/templates'
 
 const addBtn = (name)=>{
-    return `<a-button type="primary" @click="handleCreate"> ${name??'新增'} </a-button>`
+    return `<a-button type="primary" @click="handleCreate"> ${name||'新增'} </a-button>`
 }
 const editBtn = ()=>{
     return `{
