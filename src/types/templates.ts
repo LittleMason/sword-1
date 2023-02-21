@@ -43,13 +43,14 @@ export type ActionsType = {
 };
 
 export type DynamicFieldType = {
+  id:any;
   field:string; //数据库字段
+  formField:string | undefined; //数据库字段
   label:string; //展示名称
   component:ComponentType; //组件
   isSearchForm:boolean | number; //是否是搜索表单字段
   isEditForm:boolean | number; //是否是编辑表单字段
   required?:boolean | number; //编辑字段是否必填
-  id:any;
   width?:string | number; //表单列表宽度
 }
 

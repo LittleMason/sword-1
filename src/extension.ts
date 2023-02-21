@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CatCodingPanel } from './webview';
+import { Sword1Pannel } from './webview';
 import { HostTreeDataProvider, HostConfig } from './treeDataProvider';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -26,11 +26,11 @@ export function activate(context: vscode.ExtensionContext) {
 		hostTreeDataProvider.unchoose(item);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('sword1.start', () => {
-		CatCodingPanel.createOrShow(context.extensionUri);
+		Sword1Pannel.createOrShow(context.extensionUri);
 	}));
 	//树视图区域点击事件
 	const editHandle = vscode.commands.registerCommand('sword1.edit', (params) => {
-		CatCodingPanel.createOrShow(context.extensionUri);
+		Sword1Pannel.createOrShow(context.extensionUri);
 	});
 	[editHandle].forEach(item=>{
 		context.subscriptions.push(item);

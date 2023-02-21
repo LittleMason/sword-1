@@ -30,7 +30,7 @@ const createSearchFormField = (dynamicFields: DynamicFieldType[]) => {
   return datas.map((item) => {
     const colSpan = item.component.indexOf("Picker")!=-1 ? "24" : "8";
     return `{
-         field: '${item.field}',
+         field: '${item.formField || item.field}',
          label: '${item.label}',
          component: '${item.component}',
          colProps: { span: ${colSpan} },
@@ -44,7 +44,7 @@ const createEditFormField = (dynamicFields: DynamicFieldType[]) => {
   });
   return datas.map((item) => {
     return `{
-            field: '${item.field}',
+            field: '${item.formField || item.field}',
             label: '${item.label}',
             component: '${item.component}',
             required: ${item.required?'true':'false'},

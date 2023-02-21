@@ -1,13 +1,5 @@
 import * as vscode from 'vscode';
-const axios = require('axios');
 import { FileUtil } from './utils/fileUtil'
-
-const cats = {
-	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
-	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
-	'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
-};
-let data:any = "正在获取最新配置";
 
 function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 	return {
@@ -22,13 +14,13 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 /**
  * Manages cat coding webview panels
  */
- export class CatCodingPanel {
+ export class Sword1Pannel {
 	/**
 	 * Track the currently panel. Only allow a single panel to exist at a time.
 	 */
-	public static currentPanel: CatCodingPanel | undefined;
+	public static currentPanel: Sword1Pannel | undefined;
 
-	public static readonly viewType = 'catCoding';
+	public static readonly viewType = 'sword1';
 
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionUri: vscode.Uri;
@@ -40,24 +32,24 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 			: undefined;
 
 		// If we already have a panel, show it.
-		if (CatCodingPanel.currentPanel) {
-			CatCodingPanel.currentPanel._panel.reveal(column);
+		if (Sword1Pannel.currentPanel) {
+			Sword1Pannel.currentPanel._panel.reveal(column);
 			return;
 		}
 
 		// Otherwise, create a new panel.
 		const panel = vscode.window.createWebviewPanel(
-			CatCodingPanel.viewType,
+			Sword1Pannel.viewType,
 			'V3 中台系统模板生成',
 			column || vscode.ViewColumn.One,
 			getWebviewOptions(extensionUri),
 		);
 
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
+		Sword1Pannel.currentPanel = new Sword1Pannel(panel, extensionUri);
 	}
 
 	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
+		Sword1Pannel.currentPanel = new Sword1Pannel(panel, extensionUri);
 	}
 
 	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -102,7 +94,7 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 	}
 
 	public dispose() {
-		CatCodingPanel.currentPanel = undefined;
+		Sword1Pannel.currentPanel = undefined;
 
 		// Clean up our resources
 		this._panel.dispose();
@@ -121,26 +113,26 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		// Vary the webview's content based on where it is located in the editor.
 		switch (this._panel.viewColumn) {
 			case vscode.ViewColumn.Two:
-				this._updateForCat(webview, 'Compiling Cat');
+				this._updateForCat(webview);
 				return;
 
 			case vscode.ViewColumn.Three:
-				this._updateForCat(webview, 'Testing Cat');
+				this._updateForCat(webview);
 				return;
 
 			case vscode.ViewColumn.One:
 			default:
-				this._updateForCat(webview, 'Coding Cat');
+				this._updateForCat(webview);
 				return;
 		}
 	}
 
-	private _updateForCat(webview: vscode.Webview, catName: keyof typeof cats) {
+	private _updateForCat(webview: vscode.Webview) {
 		// this._panel.title = catName;
-		this._panel.webview.html = this._getHtmlForWebview(webview, cats[catName]);
+		this._panel.webview.html = this._getHtmlForWebview(webview);
 	}
 
-	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
+	private _getHtmlForWebview(webview: vscode.Webview) {
 		// console.log('workspaceFolder:',workspaceFolder);
 		// Local path to main script run in the webview
 		const chunkJsPath = vscode.Uri.joinPath(this._extensionUri, 'media/js', 'chunk-vendors.js');
