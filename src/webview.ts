@@ -59,6 +59,11 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		// Set the webview's initial html content
 		this._update();
 
+		//postMessage to webview
+		this._panel.webview.postMessage({
+			rootPath:vscode.workspace.workspaceFolders[0].uri.fsPath
+		})
+
 		// Listen for when the panel is disposed
 		// This happens when the user closes the panel or when the panel is closed programmatically
 		this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -151,6 +156,7 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
 		const appCss = webview.asWebviewUri(appCssPath);
 		console.log('chunkCss:',chunkCss)
 		console.log('scriptUri:',chunkJs)
+		console.log('vscode.workspaceFolders:',vscode.workspace.workspaceFolders[0].uri.fsPath);
 		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
