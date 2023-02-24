@@ -7,7 +7,7 @@
 2. Supports custom template generation (in development... laughing 0.0);
 
 ### 发布流程
-vsce publish -p '（自己的token,token都有时限，过期了再去官网申请一个 网址：https://dev.azure.com/407703712/_usersSettings/tokens）'
+vsce publish -p （自己的token,token都有时限，过期了再去官网申请一个 网址：https://dev.azure.com/407703712/_usersSettings/tokens）
 
 [使用文档]()
 
@@ -15,5 +15,5 @@ vsce publish -p '（自己的token,token都有时限，过期了再去官网申�
 
 [问题反馈](https://github.com/haimalairen/sword_1/issues)
 <!--
-samhtaubb673xpidzy23izpmzts4snd2ezxhqbe7qjshorvn2dwq
+mjov52ft6aalziigv4q3gcdyrxoeesiikht27ilkpdau2nsjuw4q
 -->
