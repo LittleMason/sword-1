@@ -58,10 +58,11 @@ const handleDelete = ()=>{
  */
 export const temps = (addName,actions:ActionsType)=>{
     const {add,del,edit} = actions;
+    const needDrawer = (add ?? del ?? edit)
     return `
 <template>
     <div>
-      <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
+      <BasicTable @register="registerTable">
         <template #toolbar>
           ${add?addBtn(addName):''}
         </template>
@@ -91,7 +92,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
     return `
     <script lang="ts">
     //other第三方
-    import { defineComponent, ref } from 'vue';
+    import { defineComponent } from 'vue';
     //self全局业务组件
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
     import {useDrawer} from "/@/components/Drawer";

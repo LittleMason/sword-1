@@ -18,7 +18,7 @@ const createTableField = (dynamicFields: DynamicFieldType[]) => {
     return `{
             title: '${item.label}',
             dataIndex: '${item.field}',
-            width: '${item.width ?? 100}',
+            width: ${item.width ?? 100},
         }`;
   });
 };
@@ -28,7 +28,7 @@ const createSearchFormField = (dynamicFields: DynamicFieldType[]) => {
     return item.isSearchForm === 1;
   });
   return datas.map((item) => {
-    const colSpan = item.component.indexOf("Picker")!=-1 ? "24" : "8";
+    const colSpan = item.component.indexOf("Picker") != -1 ? "24" : "8";
     return `{
          field: '${item.formField || item.field}',
          label: '${item.label}',
@@ -47,7 +47,7 @@ const createEditFormField = (dynamicFields: DynamicFieldType[]) => {
             field: '${item.formField || item.field}',
             label: '${item.label}',
             component: '${item.component}',
-            required: ${item.required?'true':'false'},
+            required: ${item.required ? 'true' : 'false'},
         }`;
   });
 };
