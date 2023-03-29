@@ -76,9 +76,9 @@ const apiTemp = (apis,title) => {
     ${
       Export
         ? `
-        export const Export = () =>
+        export const Export = (params?:any) =>
           lorealHttp.post<any>(
-            { url: Api.Export },
+            { url: Api.Export,params },
             {
               isDownload: true,
               fileName: '${title}.xlsx',

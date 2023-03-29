@@ -1,5 +1,5 @@
 import {ActionsType} from '../types/templates'
-
+let isSimpleSearch = false;
 const addBtn = (name)=>{
     return `<a-button type="primary" @click="handleCreate"> ${name||'新增'} </a-button>`
 }
@@ -66,7 +66,7 @@ export const temps = (addName,actions:ActionsType)=>{
         <template #toolbar>
           ${add?addBtn(addName):''}
         </template>
-        <template #bodyCell="{ column, record }">
+        <template #bodyCell="{ column${!isSimpleSearch ? ', record':''} }">
           <template v-if="column.key === 'action'">
             <TableAction
               :actions="[
@@ -77,7 +77,7 @@ export const temps = (addName,actions:ActionsType)=>{
           </template>
         </template>
       </BasicTable>
-      <Drawer @register="registerDrawer" ${add?`@success="handleSuccess"`:''}/>
+      ${!isSimpleSearch?`<Drawer @register="registerDrawer" ${add?`@success="handleSuccess"`:''}/>`:''}
     </div>
 </template>`
 }
@@ -95,25 +95,28 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
     import { defineComponent } from 'vue';
     //self全局业务组件
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import {useDrawer} from "/@/components/Drawer";
     //self页面局部配置及组件
     import { Origin,${del?'Del,':''}${upload?'Upload,Download,':''}${_export?'Export':''} } from '/@/api/${apiPath}';
     import { columns, searchFormSchema } from './data';
-    import Drawer from './Drawer.vue';
+    //编辑框
+    ${!isSimpleSearch?`import {useDrawer} from "/@/components/Drawer";`:''}
+    ${!isSimpleSearch?`import Drawer from './Drawer.vue';`:''}
   
     export default defineComponent({
       name: '${modelName}',
-      components: { BasicTable, Drawer, TableAction },
+      components: { BasicTable, ${!isSimpleSearch?'Drawer,':''} TableAction },
       setup() {
-        const [registerDrawer, { openDrawer }] = useDrawer();
-        const [registerTable, { reload }] = useTable({
+        ${!isSimpleSearch?`const [registerDrawer${!isSimpleSearch ? `,{ openDrawer }`:''}] = useDrawer();`:''}
+        const [registerTable, {${!isSimpleSearch?'reload, ':''}${_export?'getForm':''}}] = useTable({
           title:'${title}',
           api: Origin,
           ${upload?
           `importApi:Upload,
           downloadApi:Download,`:''
           }
-          ${_export?`exportApi:Export,`:''}
+          ${_export?`exportApi: function () {
+            return Export(getForm().getFieldsValue());
+          },`:''}
           columns,
           formConfig: {
             labelWidth: 120,
@@ -125,12 +128,12 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
           bordered: true,
           showIndexColumn: true,
           canResize: true,
-          actionColumn: {
+          actionColumn: ${!isSimpleSearch?`{
             width: 80,
             title: '操作',
             dataIndex: 'action',
             fixed: 'left',
-          },
+          }`:'undefined'},
         }); 
              
         ${add?handleAdd():''}
@@ -139,7 +142,7 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
         
         return {
           registerTable,
-          registerDrawer,
+          ${!isSimpleSearch?'registerDrawer,':''}
           ${add?'handleCreate,':''}
           ${add?'handleSuccess,':''}
           ${del?'handleDelete,':''}
@@ -159,6 +162,8 @@ export const scripts = (modelName,title,apiPath,actions:ActionsType)=>{
  * @param {ActionsType} actions - 增删改等操作的启用
  */
 const vueTemp = (addName,modelName,title,apiPath,actions:ActionsType)=>{
+  const { add,edit,del } = actions;
+  isSimpleSearch = !add && !edit && !del;
     return `
     ${temps(addName,actions)}
     ${scripts(modelName,title,apiPath,actions)}

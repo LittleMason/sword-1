@@ -93,6 +93,8 @@ export class FileUtil {
     )}`; //生成api完整路径
     const _apiFileName = apiFileName ? `${apiFileName}.ts` : `${modelName}.ts`; //api文件名称
     const apiModelPath = `${modelPath}/${_apiFileName.substring(0,_apiFileName.length-3)}`;
+    const { add,edit,del } = actions;
+    const isSimpleSearch =  !add && !edit && !del;//纯查询模式，没有增删改的页面
     let actionType:ActionsType = {
       add: false,
       del: false,
@@ -122,17 +124,19 @@ export class FileUtil {
         `${folderPath}\\index.vue`,
         vueTemp(addName, modelName, title, apiModelPath, actionType)
       );
-      await fs.writeFileSync(
-        `${folderPath}\\Drawer.vue`,
-        drawerTemp(
-          apiModelPath,
-          modelName,
-          addName,
-          hasProjectDefaultParam,
-          hasDynamicTable,
-          actionType
-        )
-      );
+      if(!isSimpleSearch){
+        await fs.writeFileSync(
+          `${folderPath}\\Drawer.vue`,
+          drawerTemp(
+            apiModelPath,
+            modelName,
+            addName,
+            hasProjectDefaultParam,
+            hasDynamicTable,
+            actionType
+          )
+        );
+      }
       console.log("dataResult:", dataResult);
       console.log("apiResult:", apiResult);
       return "创建成功！";
